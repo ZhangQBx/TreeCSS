@@ -1,0 +1,12 @@
+is_regression: False
+dataset_name: "bank"
+data_path: "../raw_data/Bank.csv"
+epochs:
+batch_size_normal:
+batch_size_cc:
+lr:
+lr_gamma:
+lr_step:
+kmeans:
+  k_per_clients:
+# Done

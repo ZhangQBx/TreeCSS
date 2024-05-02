@@ -1,0 +1,26 @@
+hydra:
+  run:
+    dir: ../log/${now:%Y-%m-%d}/${now:%H-%M-%S}
+defaults:
+  - server_conf: server_conf
+  - lr_conf: lr_Bank
+  - mlp_conf: mlp_Bank
+  - knn_conf: knn_Rice
+  - _self_
+  - override hydra/job_logging: disabled
+
+trainer: mlp
+defs:
+  log_path: "../log"
+  mode: debug
+  seed:
+  vertical_fl:
+    train_type: normal
+#     train_type: cc
+    train_test_split_rate: 0.7
+    remove_outliers_rate: 0.01
+  num_clients: 3
+  use_psi: True
+  psi_only: False
+  use_align_label: True
+  use_weight: True

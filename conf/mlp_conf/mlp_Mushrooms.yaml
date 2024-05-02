@@ -1,0 +1,14 @@
+is_regression: False
+dataset_name: "mushrooms"
+data_path: "../raw_data/Mushrooms.csv"
+epochs:
+batch_size_normal:
+batch_size_cc:
+lr:
+lr_gamma:
+lr_step:
+n_bottom_out:
+n_top_out:
+kmeans:
+  k_per_clients:
+#   Done

@@ -1,0 +1,9 @@
+is_regression: True
+dataset_name: "yp"
+data_path: "../raw_data/YearPredictionMSD.csv"
+epochs:
+lr:
+lr_gamma:
+lr_step:
+kmeans:
+  k_per_clients:

@@ -1,0 +1,9 @@
+is_regression: False
+dataset_name: "zboson"
+data_path: "../raw_data/Zboson.csv"
+epochs: 1
+batch_size_normal: 20
+n_classes: 2
+top_k: 5
+kmeans:
+  k_per_clients: 50

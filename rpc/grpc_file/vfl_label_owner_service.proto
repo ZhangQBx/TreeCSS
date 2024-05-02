@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+message lr_train_forward_request_label_owner{
+  int32 server_id = 1;
+  int32 batch_index = 2;
+  //  bytes summed_forward_result = 3;
+  repeated float summed_forward_result = 3;
+}
+
+message lr_train_forward_response_label_owner{
+  int32 server_id = 1;
+  //  bytes batch_gradient = 2;
+  repeated float batch_gradient = 2;
+  bool early_stop = 3;
+}
+
+message lr_test_forward_request_label_owner{
+  int32 server_id = 1;
+  int32 batch_index = 2;
+  //  bytes summed_test_result = 3;
+  repeated float summed_test_result = 3;
+}
+
+message lr_test_forward_response_label_owner{
+  int32 server_id = 1;
+  bool receive_flag = 2;
+}
+
+message mlp_train_top_forward_request{
+  int32 server_id = 1;
+  int32 batch_index = 2;
+  repeated internal_top_forward top_forward = 3;
+}
+
+message mlp_train_top_forward_response{
+  int32 server_id = 1;
+  repeated internal_batch_gradient batch_gradient = 2;
+  bool early_stop = 3;
+}
+
+message mlp_test_top_forward_request{
+  int32 server_id = 1;
+  int32 batch_index = 2;
+  repeated internal_top_forward top_forward = 3;
+}
+
+message mlp_test_top_forward_response{
+  int32 server_id = 1;
+  bool receive_flag = 2;
+}
+
+message internal_top_forward{
+  repeated float forward = 1;
+}
+
+message internal_batch_gradient{
+  repeated float grad = 1;
+}
+
+message knn_distance_request_label_owner{
+  int32 server_id = 1;
+  int32 index = 2;
+//  bytes dist = 3;
+  repeated float dist = 3;
+}
+
+message knn_distance_response_label_owner{
+  int32 server_id = 1;
+  bool receive_flag = 2;
+}
+
+message server_cluster_info_request{
+  int32 server_id = 1;
+  repeated cluster_info info = 2;
+}
+
+message cluster_info{
+//  bytes cluster_label = 1;
+  repeated int32 cluster_label = 1;
+//  bytes cluster_distance = 2;
+  repeated float cluster_distance = 2;
+//  bytes data_weight = 3;
+  repeated float data_weight = 3;
+}
+
+message label_owner_align_index_response{
+  int32 server_id = 1;
+//  bytes align_index = 2;
+  repeated int32 align_index = 2;
+}
+
+message invite_psi_request{
+  int32 server_id = 1;
+  bool invite_psi = 2;
+}
+
+message invite_psi_response{
+  int32 server_id = 1;
+  bool recv_status = 2;
+}
+
+message rsa_public_key_request_label_owner{
+  int32 cid = 1;
+  int32 qid = 2;
+  bytes pk_N = 3;
+  int32 pk_e = 4;
+}
+
+message rsa_public_key_response_label_owner{
+  int32 cid = 1;
+  int32 qid = 2;
+  bool recv_status = 3;
+}
+
+message send_client_enc_ids_request_label_owner{
+  int32 cid = 1;
+  int32 qid = 2;
+  repeated string client_enc_ids_pk_str = 3;
+}
+
+message send_client_enc_ids_response_label_owner{
+  int32 cid = 1;
+  int32 qid = 2;
+  bool recv_status = 3;
+  //  repeated string client_dec_ids_sk = 3;
+  //  repeated string server_enc_ids_sk = 4;
+}
+
+message send_server_enc_ids_and_client_dec_ids_request_label_owner{
+  int32 cid = 1;
+  int32 qid = 2;
+  repeated string client_dec_ids = 3;
+  repeated string server_hash_enc_ids = 4;
+}
+
+message send_server_enc_ids_and_client_dec_ids_response_label_owner{
+  int32 cid = 1;
+  int32 qid = 2;
+  bool client_dec_ids_recv_status = 3;
+  bool server_hash_enc_ids_recv_status = 4;
+}
+
+service VFLLabelOwnerService{
+  rpc send_rsa_public_key_label_owner(rsa_public_key_request_label_owner) returns(rsa_public_key_response_label_owner);
+  rpc send_client_enc_ids_label_owner(send_client_enc_ids_request_label_owner) returns(send_client_enc_ids_response_label_owner);
+  rpc send_server_enc_ids_and_client_dec_ids_label_owner(send_server_enc_ids_and_client_dec_ids_request_label_owner)
+      returns(send_server_enc_ids_and_client_dec_ids_response_label_owner);
+
+  rpc invite_label_owner_psi(invite_psi_request) returns (invite_psi_response);
+
+  rpc get_lr_train_batch_gradient(lr_train_forward_request_label_owner) returns (lr_train_forward_response_label_owner);
+  rpc calculate_lr_test_accuracy(lr_test_forward_request_label_owner) returns (lr_test_forward_response_label_owner);
+
+  rpc get_mlp_train_batch_gradient(mlp_train_top_forward_request) returns (mlp_train_top_forward_response);
+  rpc calculate_mlp_test_accuracy(mlp_test_top_forward_request) returns (mlp_test_top_forward_response);
+
+  rpc calculate_knn_accuracy(knn_distance_request_label_owner) returns (knn_distance_response_label_owner);
+
+  rpc calculate_client_align_index(server_cluster_info_request) returns (label_owner_align_index_response);
+}
